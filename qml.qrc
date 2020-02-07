@@ -10,5 +10,8 @@
         <file>images/tabs_standard.png</file>
         <file>images/textinput.png</file>
         <file>images/toolbar.png</file>
+        <file>AndroidDelegate.qml</file>
+        <file>StackMainItem.qml</file>
+        <file>DbButton.qml</file>
     </qresource>
 </RCC>

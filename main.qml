@@ -9,7 +9,7 @@ ApplicationWindow {
     title: qsTr("Hello World")
 
     Rectangle {
-        color: "#212126"
+        color: "#EFEFEF"
         anchors.fill: parent
     }
 
@@ -24,79 +24,80 @@ ApplicationWindow {
             width: opacity ? 30 : 0
             anchors.left: parent.left
             anchors.leftMargin: 20
-            //opacity: stackView.depth > 1 ? 1 : 0
+            opacity: stackView.depth > 1 ? 1 : 0
             anchors.verticalCenter: parent.verticalCenter
             antialiasing: true
             height: 30
             radius: 4
-            color: backmouse.pressed ? "#222" : "transparent"
+            color: backmouse.pressed ? "#AEA085" : "transparent"
             Behavior on opacity { NumberAnimation{} }
             Image {
                 anchors.fill: parent
                 fillMode: Image.Stretch
-                //anchors.verticalCenter: parent.verticalCenter
                 source: "images/navigation_previous_item.png"
             }
             MouseArea {
                 id: backmouse
                 anchors.fill: parent
                 anchors.margins: -10
-                //onClicked: stackView.pop()
+                onClicked: stackView.pop()
             }
         }
 
         Text {
             font.pixelSize: 21
+            font.bold: true
             Behavior on x { NumberAnimation{ easing.type: Easing.OutCubic} }
             x: backButton.x + backButton.width + 10
             anchors.verticalCenter: parent.verticalCenter
-            color: "white"
+            color: "#006B73"
             text: "Курсы"
         }
     }
 
-    /*StackView {
-        id: mainView
-        anchors.fill: parent
-        delegate: StackViewDelegate {
-            function transitionFinished(properties)
-            {
-                properties.exitItem.x = 0
-                properties.exitItem.rotation = 0
-            }
-
-            pushTransition: StackViewTransition {
-                SequentialAnimation {
-                    ScriptAction {
-                        script: enterItem.rotation = 90
-                    }
-                    PropertyAnimation {
-                        target: enterItem
-                        property: "x"
-                        from: enterItem.width
-                        to: 0
-                    }
-                    PropertyAnimation {
-                        target: enterItem
-                        property: "rotation"
-                        from: 90
-                        to: 0
-                    }
-                }
-                PropertyAnimation {
-                    target: exitItem
-                    property: "x"
-                    from: 0
-                    to: -exitItem.width
-                }
-            }
+    ListModel {
+        id: pageModel
+        ListElement {
+            title: "Element1"
+            page: "content/Element1.qml"
+        }
+        ListElement {
+            title: "Element2"
+            page: "content/Element2.qml"
+        }
+        ListElement {
+            title: "Element3"
+            page: "content/Element3.qml"
+        }
+        ListElement {
+            title: "Element4"
+            page: "content/Element4.qml"
+        }
+        ListElement {
+            title: "Element5"
+            page: "content/Element5.qml"
+        }
+        ListElement {
+            title: "Element6"
+            page: "content/Element6.qml"
         }
     }
 
-    Component.onCompleted: {
-        var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; width: 20; height: 20}',
-                                           mainView.parent,
-                                           "dynamicSnippet1");
-        mainView.push(newObject)
-    }*/
+    StackView {
+        id: stackView
+        anchors.fill: parent
+        // Implements back key navigation
+        focus: true
+        Keys.onReleased: {
+            if (event.key === Qt.Key_Back && stackView.depth > 1) {
+                stackView.pop();
+                event.accepted = true;
+            }
+        }
+
+        initialItem: StackMainItem {
+            model: pageModel
+            stackView: stackView
+        }
+    }
 }
